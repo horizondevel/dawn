@@ -9,10 +9,13 @@
 
     <title>{{ title }}</title>
 </head>
-<body >
-<div hx-get="/fragment/v1/icon" hx-trigger="load"></div>
+<body>
+<div class="app app__container">
+    <div class="app__header">
+        <h1 class="app__title">{{ title }}</h1>
+    </div>
 
-<div hx-get="/fragment/v1/frag/frag" hx-trigger="load"></div>
-
+    <div hx-get="/fragments/v1/calendar/calendar" hx-trigger="load" hx-swap="outerHTML"></div>
+</div>
 </body>
 </html>

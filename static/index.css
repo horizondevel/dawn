@@ -1,5 +1,46 @@
 body {
-    background-color: #62c4f6;
     margin: 0;
 }
 
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.calendar {
+    margin: 8px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar__container {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-left: black solid;
+}
+
+
+.calendar__item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: black solid;
+    border-left:none;
+}
+
+.calendar__time-slots {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+}
+
+.calendar__time-slots__time {
+    border-top: black solid;
+    flex:1;
+}

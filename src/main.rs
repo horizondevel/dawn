@@ -18,11 +18,7 @@ async fn main() -> Result<(), std::io::Error> {
         ServeDir::new("static").not_found_service(ServeFile::new("static/index.html"));
     let app = Router::new()
         .route("/", get(handle_home))
-        // .route("/fragment/v1/{*path}", get({
-        //     let state = app_state.clone();
-        //     move |path| htmx_handler(state, path )
-        // }))
-        .route("/fragment/v1/{*path}", get(htmx_handler))
+        .route("/fragments/v1/{*path}", get(htmx_handler))
         .with_state(app_state)
         .nest_service("/static", static_serve);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:9999").await?;
@@ -41,7 +37,6 @@ async fn htmx_handler(
     State(state): State<AppState>,
     Path(path_frag): Path<String>,
 ) -> Html<String> {
-    println!("path: {}", path_frag);
     let context = Context::new();
     Html(
         state
