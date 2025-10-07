@@ -1,4 +1,4 @@
-use axum::extract::State;
+use axum::extract::{Path, State};
 use axum::response::Html;
 use axum::routing::get;
 use axum::Router;
@@ -18,8 +18,11 @@ async fn main() -> Result<(), std::io::Error> {
         ServeDir::new("static").not_found_service(ServeFile::new("static/index.html"));
     let app = Router::new()
         .route("/", get(handle_home))
-        .route("/frag", get(handle_frag))
-        .route("/icon", get(handle_icon))
+        // .route("/fragment/v1/{*path}", get({
+        //     let state = app_state.clone();
+        //     move |path| htmx_handler(state, path )
+        // }))
+        .route("/fragment/v1/{*path}", get(htmx_handler))
         .with_state(app_state)
         .nest_service("/static", static_serve);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:9999").await?;
@@ -33,20 +36,17 @@ async fn handle_home(State(state): State<AppState>) -> Html<String> {
     context.insert("message", "Dawn forever");
     Html(state.templates.render("index.html", &context).unwrap())
 }
-async fn handle_icon(State(state): State<AppState>) -> Html<String> {
-    Html(
-        state
-            .templates
-            .render("icon.html", &Context::default())
-            .unwrap(),
-    )
-}
 
-async fn handle_frag(State(state): State<AppState>) -> Html<String> {
+async fn htmx_handler(
+    State(state): State<AppState>,
+    Path(path_frag): Path<String>,
+) -> Html<String> {
+    println!("path: {}", path_frag);
+    let context = Context::new();
     Html(
         state
             .templates
-            .render("frag.html", &Context::default())
+            .render(&*(path_frag + ".html"), &context)
             .unwrap(),
     )
 }

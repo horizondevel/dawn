@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="/static/dawn-v1.svg">
     <script src="/static/htmx.min.js"></script>
+    <link rel="stylesheet" href="/static/index.css">
 
     <title>{{ title }}</title>
 </head>
 <body >
-<div hx-get="/icon" hx-trigger="load"></div>
+<div hx-get="/fragment/v1/icon" hx-trigger="load"></div>
 
-<div hx-get="/frag" hx-trigger="load"></div>
+<div hx-get="/fragment/v1/frag/frag" hx-trigger="load"></div>
 
 </body>
 </html>
