@@ -1,0 +1,9 @@
+= Dawn
+
+Calendar application built on Axum and HTMX
+
+== Development
+
+$```cargo build```
+
+$```cargo run```
