@@ -27,40 +27,69 @@ body {
 }
 
 .calendar {
-    width: 100%;
+    box-shadow: 1px 10px 11px -4px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 1px 10px 11px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 1px 10px 11px -4px rgba(0,0,0,0.75);
+    border-radius: 8px ;
+    margin: 8px ;
+    padding: 4px ;
 }
 
 .calendar__header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    height: 60px;
 }
 
+.calendar__nav {
+    border: none;
+    background: #fff;
+    min-width: 60px;
+    border-radius: 8px;
+}
+
+.calendar__nav:hover {
+    cursor: pointer;
+    background: #3d60cd;
+}
+
+.calendar__title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.calendar__title-month {
+    font-size: 24px;
+    padding: 8px;
+}
+.calendar__title-year {
+    font-size: 14px;
+    padding: 8px;
+
+}
 .calendar__body {
     display: flex;
     flex-direction: row;
-    border-left: black solid;
 }
-
 
 .calendar__col {
     flex: 1;
     display: flex;
     flex-direction: column;
-    border: black solid;
-    border-left: none;
 }
 
 .calendar__col-header {
-    border-bottom: black solid;
 }
 
 .calendar__col-day {
     background: #fff;
     padding-bottom: 100%;
+    border-radius: 8px;
 
     > div {
         position: absolute;
+        padding: 4px;
     }
 }
 
@@ -70,7 +99,7 @@ body {
 }
 
 .calendar__col-other {
-
+    opacity: .6;
     background: #6d6d6d;
 }
 
