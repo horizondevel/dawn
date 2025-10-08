@@ -81,8 +81,7 @@ async fn handle_calendar(
         context.insert(k, &uppercase_first_letter(v));
     });
 
-
-    let month =Month::from_str(params.get("month").unwrap()).unwrap();
+    let month = Month::from_str(params.get("month").unwrap()).unwrap();
     let year = params.get("year").unwrap().parse::<i32>().unwrap();
 
     let may = make_calendar(month, year);
@@ -100,6 +99,8 @@ async fn handle_calendar(
     context.insert("month", &may.month);
     context.insert("year", &may.year);
     context.insert("day_cols", &day_cols);
+    context.insert("prev_month", &may.prev_month);
+    context.insert("next_month", &may.next_month);
 
     Html(
         state

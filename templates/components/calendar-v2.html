@@ -1,5 +1,18 @@
-<div class="calendar">
-    <div class="calendar__header">{{month}} {{year}}</div>
+<div id="calendar" class="calendar">
+    <div class="calendar__header">
+        <button hx-get="/fragments/v1/components/calendar-v2?month={{prev_month.month}}&year={{prev_month.year}}"
+                hx-target="#calendar"
+                hx-swap="outerHTML">
+            <
+        </button>
+
+        <div>{{month}} {{year}}</div>
+        <button hx-get="/fragments/v1/components/calendar-v2?month={{next_month.month}}&year={{next_month.year}}"
+                hx-target="#calendar"
+                hx-swap="outerHTML">
+            >
+        </button>
+    </div>
     <div class="calendar__body">
         {% for col in day_cols %}
         <div class="calendar__col">

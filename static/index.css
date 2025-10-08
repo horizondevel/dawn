@@ -30,6 +30,12 @@ body {
     width: 100%;
 }
 
+.calendar__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .calendar__body {
     display: flex;
     flex-direction: row;

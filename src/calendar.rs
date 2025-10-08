@@ -7,6 +7,8 @@ pub struct Calendar {
     pub month: Month,
     pub year: i32,
     pub days: Vec<Day>,
+    pub prev_month: MonthNav,
+    pub next_month: MonthNav,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -122,6 +124,29 @@ pub fn make_calendar(month: Month, year: i32) -> Calendar {
         first_of_the_calendar -= Duration::days(1)
     }
 
+    let prev_month = if chrono_month == 1 {
+        MonthNav {
+            month: Month::December,
+            year: year - 1,
+        }
+    } else {
+        MonthNav {
+            month: Month::from_chrono(chrono_month - 1),
+            year,
+        }
+    };
+
+    let next_month = if chrono_month == 12 {
+        MonthNav {
+            month: Month::January,
+            year: year + 1,
+        }
+    } else {
+        MonthNav {
+            month: Month::from_chrono(chrono_month + 1),
+            year,
+        }
+    };
     let mut days: Vec<Day> = Vec::new();
     for d in first_of_the_calendar.iter_days() {
         days.push(Day {
@@ -130,12 +155,21 @@ pub fn make_calendar(month: Month, year: i32) -> Calendar {
             week_day: WeekDay::from_chrono(d.weekday()),
         });
         let day_num: u32 = d.num_days_in_month() as u32;
-        if d.weekday() == Weekday::Sat
-            && (d.month() > chrono_month || day_num == d.day())
-        {
+        if d.weekday() == Weekday::Sat && (d.month() == Month::get_index(&next_month.month) || day_num == d.day()) {
             break;
         }
     }
+    Calendar {
+        year,
+        month,
+        days,
+        prev_month,
+        next_month,
+    }
+}
 
-    Calendar { year, month, days }
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MonthNav {
+    pub month: Month,
+    pub year: i32,
 }
