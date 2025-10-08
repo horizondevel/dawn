@@ -1,9 +1,10 @@
-use crate::calendar::{Calendar, Day, Month, WeekDay};
+use crate::calendar::{make_calendar, Day, Month, WeekDay};
 use axum::extract::{Path, Query, State};
 use axum::response::Html;
 use axum::routing::get;
 use axum::Router;
 use std::collections::HashMap;
+use std::str::FromStr;
 use tera::{Context, Tera};
 use tower_http::compression::CompressionLayer;
 use tower_http::services::{ServeDir, ServeFile};
@@ -80,186 +81,12 @@ async fn handle_calendar(
         context.insert(k, &uppercase_first_letter(v));
     });
 
-    let month = Month::May;
-    let year = 2017;
-    let days = vec![
-        Day {
-            month: Month::April,
-            day: 30,
-            week_day: WeekDay::Sun,
-        },
-        Day {
-            month: Month::May,
-            day: 1,
-            week_day: WeekDay::Mon,
-        },
-        Day {
-            month: Month::May,
-            day: 2,
-            week_day: WeekDay::Tues,
-        },
-        Day {
-            month: Month::May,
-            day: 3,
-            week_day: WeekDay::Wed,
-        },
-        Day {
-            month: Month::May,
-            day: 4,
-            week_day: WeekDay::Thurs,
-        },
-        Day {
-            month: Month::May,
-            day: 5,
-            week_day: WeekDay::Fri,
-        },
-        Day {
-            month: Month::May,
-            day: 6,
-            week_day: WeekDay::Sat,
-        },
-        Day {
-            month: Month::May,
-            day: 7,
-            week_day: WeekDay::Sun,
-        },
-        Day {
-            month: Month::May,
-            day: 8,
-            week_day: WeekDay::Mon,
-        },
-        Day {
-            month: Month::May,
-            day: 9,
-            week_day: WeekDay::Tues,
-        },
-        Day {
-            month: Month::May,
-            day: 10,
-            week_day: WeekDay::Wed,
-        },
-        Day {
-            month: Month::May,
-            day: 11,
-            week_day: WeekDay::Thurs,
-        },
-        Day {
-            month: Month::May,
-            day: 12,
-            week_day: WeekDay::Fri,
-        },
-        Day {
-            month: Month::May,
-            day: 13,
-            week_day: WeekDay::Sat,
-        },
-        Day {
-            month: Month::May,
-            day: 14,
-            week_day: WeekDay::Sun,
-        },
-        Day {
-            month: Month::May,
-            day: 15,
-            week_day: WeekDay::Mon,
-        },
-        Day {
-            month: Month::May,
-            day: 16,
-            week_day: WeekDay::Tues,
-        },
-        Day {
-            month: Month::May,
-            day: 17,
-            week_day: WeekDay::Wed,
-        },
-        Day {
-            month: Month::May,
-            day: 18,
-            week_day: WeekDay::Thurs,
-        },
-        Day {
-            month: Month::May,
-            day: 19,
-            week_day: WeekDay::Fri,
-        },
-        Day {
-            month: Month::May,
-            day: 20,
-            week_day: WeekDay::Sat,
-        },
-        Day {
-            month: Month::May,
-            day: 21,
-            week_day: WeekDay::Sun,
-        },
-        Day {
-            month: Month::May,
-            day: 22,
-            week_day: WeekDay::Mon,
-        },
-        Day {
-            month: Month::May,
-            day: 23,
-            week_day: WeekDay::Tues,
-        },
-        Day {
-            month: Month::May,
-            day: 24,
-            week_day: WeekDay::Wed,
-        },
-        Day {
-            month: Month::May,
-            day: 25,
-            week_day: WeekDay::Thurs,
-        },
-        Day {
-            month: Month::May,
-            day: 26,
-            week_day: WeekDay::Fri,
-        },
-        Day {
-            month: Month::May,
-            day: 27,
-            week_day: WeekDay::Sat,
-        },
-        Day {
-            month: Month::May,
-            day: 28,
-            week_day: WeekDay::Sun,
-        },
-        Day {
-            month: Month::May,
-            day: 29,
-            week_day: WeekDay::Mon,
-        },
-        Day {
-            month: Month::May,
-            day: 30,
-            week_day: WeekDay::Tues,
-        },
-        Day {
-            month: Month::May,
-            day: 31,
-            week_day: WeekDay::Wed,
-        },
-        Day {
-            month: Month::June,
-            day: 1,
-            week_day: WeekDay::Thurs,
-        },
-        Day {
-            month: Month::June,
-            day: 2,
-            week_day: WeekDay::Fri,
-        },
-        Day {
-            month: Month::June,
-            day: 3,
-            week_day: WeekDay::Sat,
-        },
-    ];
-    let day_clone = days.clone();
+
+    let month =Month::from_str(params.get("month").unwrap()).unwrap();
+    let year = params.get("year").unwrap().parse::<i32>().unwrap();
+
+    let may = make_calendar(month, year);
+    let day_clone = may.days.clone();
     let day_cols: Vec<Vec<&Day>> = vec![
         get_days(WeekDay::Sun, &day_clone),
         get_days(WeekDay::Mon, &day_clone),
@@ -270,12 +97,10 @@ async fn handle_calendar(
         get_days(WeekDay::Sat, &day_clone),
     ];
 
-    let may = Calendar { month, year, days };
     context.insert("month", &may.month);
     context.insert("year", &may.year);
     context.insert("day_cols", &day_cols);
 
-    println!("{:?}", context);
     Html(
         state
             .templates
@@ -285,9 +110,7 @@ async fn handle_calendar(
 }
 
 fn get_days(week_day: WeekDay, days: &Vec<Day>) -> Vec<&Day> {
-    days.iter()
-        .filter(|day| day.week_day == week_day)
-        .collect()
+    days.iter().filter(|day| day.week_day == week_day).collect()
 }
 
 fn uppercase_first_letter(s: &str) -> String {
