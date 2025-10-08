@@ -1,8 +1,8 @@
-<div id="calendar" class="calendar">
+<div class="calendar">
     <div class="calendar__header">
         <button class="calendar__nav"
                 hx-get="/fragments/v1/components/calendar-v2?month={{prev_month.month}}&year={{prev_month.year}}"
-                hx-target="#calendar"
+                hx-target="closest .calendar"
                 hx-swap="outerHTML">
             <
         </button>
@@ -17,7 +17,7 @@
         </div>
         <button class="calendar__nav"
                 hx-get="/fragments/v1/components/calendar-v2?month={{next_month.month}}&year={{next_month.year}}"
-                hx-target="#calendar"
+                hx-target="closest .calendar"
                 hx-swap="outerHTML">
             >
         </button>
