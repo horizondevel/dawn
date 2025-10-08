@@ -87,9 +87,9 @@ impl FromStr for Month {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum WeekDay {
     Mon,
-    Tues,
+    Tue,
     Wed,
-    Thurs,
+    Thu,
     Fri,
     Sat,
     Sun,
@@ -99,9 +99,9 @@ impl WeekDay {
     fn from_chrono(chrono_weekday: Weekday) -> WeekDay {
         match chrono_weekday {
             Weekday::Mon => WeekDay::Mon,
-            Weekday::Tue => WeekDay::Tues,
+            Weekday::Tue => WeekDay::Tue,
             Weekday::Wed => WeekDay::Wed,
-            Weekday::Thu => WeekDay::Thurs,
+            Weekday::Thu => WeekDay::Thu,
             Weekday::Fri => WeekDay::Fri,
             Weekday::Sat => WeekDay::Sat,
             Weekday::Sun => WeekDay::Sun,

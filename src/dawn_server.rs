@@ -89,9 +89,9 @@ async fn handle_calendar(
     let day_cols: Vec<Vec<&Day>> = vec![
         get_days(WeekDay::Sun, &day_clone),
         get_days(WeekDay::Mon, &day_clone),
-        get_days(WeekDay::Tues, &day_clone),
+        get_days(WeekDay::Tue, &day_clone),
         get_days(WeekDay::Wed, &day_clone),
-        get_days(WeekDay::Thurs, &day_clone),
+        get_days(WeekDay::Thu, &day_clone),
         get_days(WeekDay::Fri, &day_clone),
         get_days(WeekDay::Sat, &day_clone),
     ];
