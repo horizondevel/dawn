@@ -129,7 +129,10 @@ pub fn make_calendar(month: Month, year: i32) -> Calendar {
             day: d.day(),
             week_day: WeekDay::from_chrono(d.weekday()),
         });
-        if d.weekday() == Weekday::Sat && d.month() > chrono_month {
+        let day_num: u32 = d.num_days_in_month() as u32;
+        if d.weekday() == Weekday::Sat
+            && (d.month() > chrono_month || day_num == d.day())
+        {
             break;
         }
     }
