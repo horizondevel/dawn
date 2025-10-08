@@ -10,12 +10,14 @@
     <title>{{ title }}</title>
 </head>
 <body>
-<div class="app app__container">
+<div class="app">
     <div class="app__header">
         <h1 class="app__title">{{ title }}</h1>
     </div>
-
-    <div hx-get="/fragments/v1/calendar/calendar" hx-trigger="load" hx-swap="outerHTML"></div>
+    <div class="app__content">
+        <div hx-get="/fragments/v1/app/sidebar" hx-trigger="load" hx-swap="outerHTML"></div>
+        <div hx-get="/fragments/v1/app/app" hx-trigger="load" hx-swap="outerHTML"></div>
+    </div>
 </div>
 </body>
 </html>

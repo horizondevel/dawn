@@ -1,0 +1,10 @@
+{# Rust converts booleans to "True" not "true" #}
+{% if is_month == "True" %}
+<div class="calendar__col-day">
+    <div>{{day}}</div>
+</div>
+{% else %}
+<div class="calendar__col-day calendar__col-disabled">
+    <div>{{day}}</div>
+</div>
+{% endif %}

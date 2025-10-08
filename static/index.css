@@ -8,39 +8,65 @@ body {
     min-height: 100vh;
 }
 
-.calendar {
-    margin: 8px;
+.app__content {
     flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+.app__container {
+    flex: 1;
+    display: flex;
+    background-color: green;
+}
+
+.sidebar__container {
+    min-width: 300px;
     display: flex;
     flex-direction: column;
 }
 
-.calendar__container {
-    flex: 1;
+.calendar {
+    width: 100%;
+}
+
+.calendar__body {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     border-left: black solid;
 }
 
 
-.calendar__item {
+.calendar__col {
     flex: 1;
     display: flex;
     flex-direction: column;
     border: black solid;
-    border-left:none;
+    border-left: none;
 }
 
-.calendar__time-slots {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-
+.calendar__col-header {
+    font-size: 18px;
+    border-bottom: black solid;
 }
 
-.calendar__time-slots__time {
-    border-top: black solid;
-    flex:1;
+.calendar__col-day {
+    background: #fff;
+    padding-bottom: 100%;
+
+    > div {
+        position: absolute;
+    }
 }
+
+.calendar__col-day:hover {
+    background: rgba(39, 39, 191, 0.3);
+    cursor: pointer;
+}
+
+.calendar__col-disabled {
+
+    background: #6d6d6d;
+}
+
+
