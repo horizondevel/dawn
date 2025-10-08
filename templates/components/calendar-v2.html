@@ -1,0 +1,21 @@
+<div class="calendar">
+    <div class="calendar__header">{{month}} {{year}}</div>
+    <div class="calendar__body">
+        {% for col in day_cols %}
+        <div class="calendar__col">
+            <div class="calendar__col-header">{{col[0].week_day}}</div>
+            {% for day in col %}
+            {% set class_name = "calendar__col-day" %}
+            {% if day.month != month %}
+            {% set class_name = "calendar__col-day calendar__col-other" %}
+            {% endif %}
+
+            <div class="{{class_name}}">
+                <div>{{day.day}}</div>
+            </div>
+            {% endfor %}
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
