@@ -5,20 +5,21 @@ body {
 .app {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
 }
 
 .app__content {
     flex: 1;
     display: flex;
     flex-direction: row;
+    overflow: hidden;
 }
 
 .app__container {
     flex: 1;
     width: 100%;
     display: flex;
-    background-color: green;
+    background-color: #eee;
 }
 
 .sidebar__container {
@@ -28,12 +29,12 @@ body {
 }
 
 .calendar {
-    box-shadow: 1px 10px 11px -4px rgba(0,0,0,0.75);
-    -webkit-box-shadow: 1px 10px 11px -4px rgba(0,0,0,0.75);
-    -moz-box-shadow: 1px 10px 11px -4px rgba(0,0,0,0.75);
-    border-radius: 8px ;
-    margin: 8px ;
-    padding: 4px ;
+    box-shadow: 1px 10px 11px -4px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 1px 10px 11px -4px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 1px 10px 11px -4px rgba(0, 0, 0, 0.75);
+    border-radius: 8px;
+    margin: 8px;
+    padding: 4px;
 }
 
 .calendar__header {
@@ -60,15 +61,18 @@ body {
     flex-direction: row;
     align-items: center;
 }
+
 .calendar__title-month {
     font-size: 24px;
     padding: 8px;
 }
+
 .calendar__title-year {
     font-size: 14px;
     padding: 8px;
 
 }
+
 .calendar__body {
     display: flex;
     flex-direction: row;
@@ -105,3 +109,66 @@ body {
 }
 
 
+.timetable {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    overflow: auto;
+}
+
+.timetable__col {
+    flex: 1;
+}
+
+.timetable__col-time {
+    flex-grow: 0;
+    flex-direction: row;
+}
+
+.timetable__header__empty {
+
+}
+
+.timetable__header {
+    display: flex;
+    justify-content: center;
+    height: 100px;
+    border-right: solid;
+}
+
+.timetable__col-body {
+    border-top: solid;
+    height: 64px;
+    border-right: solid;
+    padding: 8px;
+    display: flex;
+}
+
+.timetable__body {
+    overflow: auto;
+}
+
+.timetable__row-half {
+    height: 64px;
+    border-top: dashed;
+}
+
+.event {
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    background: blue;
+    border-radius: 4px;
+    color: white;
+    padding: 4px;
+}
+
+.event__header {
+
+
+}
+
+.event__time {
+
+}
