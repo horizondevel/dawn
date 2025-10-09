@@ -115,10 +115,12 @@ body {
     flex-direction: row;
     width: 100%;
     overflow: auto;
+    justify-content: space-between;
 }
 
 .timetable__col {
     flex: 1;
+    min-width: 0;
 }
 
 .timetable__col-time {
@@ -155,13 +157,16 @@ body {
 }
 
 .event {
-    flex:1;
+    flex:0;
     display: flex;
     flex-direction: column;
     background: blue;
     border-radius: 4px;
     color: white;
     padding: 4px;
+    max-width: 100%;
+    height: auto;
+    box-sizing: border-box;
 }
 
 .event__header {
