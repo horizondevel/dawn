@@ -164,7 +164,7 @@ pub fn make_calendar(month: Month, year: i32) -> Calendar {
         month,
         days,
         prev_month,
-        next_month,
+        next_month: next_month,
     }
 }
 

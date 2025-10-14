@@ -1,11 +1,17 @@
+mod security_layer;
+
 use crate::calendar::{make_calendar, Day, Month, WeekDay};
+use crate::dawn_server::security_layer::SecurityLayer;
 use axum::extract::{Path, Query, State};
-use axum::response::Html;
+use axum::response::{Html, IntoResponse};
 use axum::routing::get;
 use axum::Router;
+use openidconnect::core::{CoreClient, CoreProviderMetadata};
+use openidconnect::{ClientId, ClientSecret, IssuerUrl, RedirectUrl};
 use std::collections::HashMap;
 use std::str::FromStr;
 use tera::{Context, Tera};
+use tower::{Layer, Service};
 use tower_http::compression::CompressionLayer;
 use tower_http::services::{ServeDir, ServeFile};
 
@@ -26,11 +32,16 @@ impl DawnServer {
         };
         let static_serve =
             ServeDir::new("static").not_found_service(ServeFile::new("static/index.html"));
+
         let app = Router::new()
             .route("/", get(handle_home))
             .route("/fragments/v1/{*path}", get(htmx_handler))
             .with_state(app_state)
-            .layer(CompressionLayer::new())
+            .layer(
+                tower::ServiceBuilder::new()
+                    .layer(CompressionLayer::new())
+                    .layer(SecurityLayer::new(client)),
+            )
             .nest_service("/static", static_serve);
         let listener = tokio::net::TcpListener::bind("0.0.0.0:9999").await;
         if listener.is_err() {
@@ -44,6 +55,9 @@ impl DawnServer {
     }
 }
 
+async fn create_oauth_client() -> CoreClient {
+)
+}
 async fn handle_home(State(state): State<AppState>) -> Html<String> {
     let mut context = Context::new();
     context.insert("title", "Dawn");
@@ -56,6 +70,7 @@ async fn htmx_handler(
     Path(path_frag): Path<String>,
     Query(params): Query<HashMap<String, String>>,
 ) -> Html<String> {
+    println!("In htmx_handler");
     if path_frag.contains("calendar") {
         return handle_calendar(state, path_frag, params).await;
     }
