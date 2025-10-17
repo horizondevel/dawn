@@ -1,7 +1,9 @@
 <div class="timetable__col-body">
-    <div class="event">
+    <form hx-post="/api/events" hx-swap="outerHTML" class="event">
         <input name="event_name" class="event__header" placeholder="(No Name)"/>
-        <div class="event__time">1-2</div>
-        <button>Submit</button>
-    </div>
+	<input hidden="true" name="start_time" class="event__header" value="{{start_time}}"/>
+	<input hidden="true" name="end_time" class="event__header" value="{{end_time}}"/>
+		<div class="event__time">{{start_time}}-{{end_time}}</div>
+        <button type="submit">Submit</button>
+    </form>
 </div>

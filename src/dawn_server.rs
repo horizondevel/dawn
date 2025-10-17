@@ -1,18 +1,18 @@
-use crate::calendar::{make_calendar, Day, Month, WeekDay};
+use crate::htmx_handler::{get_handler, handle};
 use axum::extract::{Path, Query, State};
 use axum::response::Html;
-use axum::routing::get;
-use axum::Router;
+use axum::routing::{get, post};
+use axum::{Form, Router};
+use serde::Deserialize;
 use std::collections::HashMap;
-use std::str::FromStr;
 use tera::{Context, Tera};
 use tower_http::compression::CompressionLayer;
 use tower_http::services::{ServeDir, ServeFile};
 
 pub struct DawnServer {}
 #[derive(Clone)]
-struct AppState {
-    templates: Tera,
+pub struct AppState {
+    pub templates: Tera,
 }
 
 impl DawnServer {
@@ -28,6 +28,7 @@ impl DawnServer {
             ServeDir::new("static").not_found_service(ServeFile::new("static/index.html"));
         let app = Router::new()
             .route("/", get(handle_home))
+            .route("/api/events", post(handle_new_event))
             .route("/fragments/v1/{*path}", get(htmx_handler))
             .with_state(app_state)
             .layer(CompressionLayer::new())
@@ -44,6 +45,12 @@ impl DawnServer {
     }
 }
 
+impl Default for DawnServer {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 async fn handle_home(State(state): State<AppState>) -> Html<String> {
     let mut context = Context::new();
     context.insert("title", "Dawn");
@@ -51,73 +58,32 @@ async fn handle_home(State(state): State<AppState>) -> Html<String> {
     Html(state.templates.render("index.html", &context).unwrap())
 }
 
+#[derive(Deserialize, Debug)]
+struct NewEventRequest {
+    event_name: String,
+    start_time: String,
+    end_time: String,
+}
+
+async fn handle_new_event(
+    State(state): State<AppState>,
+    Form(form): Form<NewEventRequest>,
+) -> Html<String> {
+    println!("Handling new event {:?}", form);
+
+    let mut context = Context::new();
+    context.insert("name", &form.event_name);
+    context.insert("start_time", &form.start_time);
+    context.insert("end_time", &form.end_time);
+    let template_name = "components/timetable/timetable_event_new.html";
+    Html(state.templates.render(template_name, &context).unwrap())
+}
+
 async fn htmx_handler(
     State(state): State<AppState>,
     Path(path_frag): Path<String>,
     Query(params): Query<HashMap<String, String>>,
 ) -> Html<String> {
-    if path_frag.contains("calendar") {
-        return handle_calendar(state, path_frag, params).await;
-    }
-    let mut context = Context::new();
-    params.iter().for_each(|(k, v)| {
-        context.insert(k, &uppercase_first_letter(v));
-    });
-    Html(
-        state
-            .templates
-            .render(&*(path_frag + ".html"), &context)
-            .unwrap(),
-    )
-}
-
-async fn handle_calendar(
-    state: AppState,
-    path_frag: String,
-    params: HashMap<String, String>,
-) -> Html<String> {
-    let mut context = Context::new();
-    params.iter().for_each(|(k, v)| {
-        context.insert(k, &uppercase_first_letter(v));
-    });
-
-    let month = Month::from_str(params.get("month").unwrap()).unwrap();
-    let year = params.get("year").unwrap().parse::<i32>().unwrap();
-
-    let may = make_calendar(month, year);
-    let day_clone = may.days.clone();
-    let day_cols: Vec<Vec<&Day>> = vec![
-        get_days(WeekDay::Sun, &day_clone),
-        get_days(WeekDay::Mon, &day_clone),
-        get_days(WeekDay::Tue, &day_clone),
-        get_days(WeekDay::Wed, &day_clone),
-        get_days(WeekDay::Thu, &day_clone),
-        get_days(WeekDay::Fri, &day_clone),
-        get_days(WeekDay::Sat, &day_clone),
-    ];
-
-    context.insert("month", &may.month);
-    context.insert("year", &may.year);
-    context.insert("day_cols", &day_cols);
-    context.insert("prev_month", &may.prev_month);
-    context.insert("next_month", &may.next_month);
-
-    Html(
-        state
-            .templates
-            .render(&*(path_frag + ".html"), &context)
-            .unwrap(),
-    )
-}
-
-fn get_days(week_day: WeekDay, days: &Vec<Day>) -> Vec<&Day> {
-    days.iter().filter(|day| day.week_day == week_day).collect()
-}
-
-fn uppercase_first_letter(s: &str) -> String {
-    let mut c = s.chars();
-    match c.next() {
-        None => String::new(),
-        Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
-    }
+    let handler = get_handler(&path_frag);
+    handle(handler, &state, path_frag.clone(), &params).await
 }
