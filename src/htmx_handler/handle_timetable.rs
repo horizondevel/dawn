@@ -40,36 +40,37 @@ pub async fn handle_timetable(
             end_time: (i + 1).to_string() + ":00",
         });
     }
-    let mut days: Vec<Day> = Vec::new();
-    days.push(Day {
-        day: "30".to_string(),
-        date: "2017-04-30".to_string(),
-    });
-    days.push(Day {
-        day: "1".to_string(),
-        date: "2017-05-01".to_string(),
-    });
-    days.push(Day {
-        day: "2".to_string(),
-        date: "2017-05-02".to_string(),
-    });
-    days.push(Day {
-        day: "3".to_string(),
-        date: "2017-05-03".to_string(),
-    });
-    days.push(Day {
-        day: "4".to_string(),
-        date: "2017-05-04".to_string(),
-    });
-    days.push(Day {
-        day: "5".to_string(),
-        date: "2017-05-05".to_string(),
-    });
-    days.push(Day {
-        day: "6".to_string(),
-        date: "2017-05-06".to_string(),
-    });
-    let timetable = Timetable { times: times, days };
+    let days: Vec<Day> = vec![
+        Day {
+            day: "30".to_string(),
+            date: "2017-04-30".to_string(),
+        },
+        Day {
+            day: "1".to_string(),
+            date: "2017-05-01".to_string(),
+        },
+        Day {
+            day: "2".to_string(),
+            date: "2017-05-02".to_string(),
+        },
+        Day {
+            day: "3".to_string(),
+            date: "2017-05-03".to_string(),
+        },
+        Day {
+            day: "4".to_string(),
+            date: "2017-05-04".to_string(),
+        },
+        Day {
+            day: "5".to_string(),
+            date: "2017-05-05".to_string(),
+        },
+        Day {
+            day: "6".to_string(),
+            date: "2017-05-06".to_string(),
+        },
+    ];
+    let timetable = Timetable { times, days };
     context.insert("times", &timetable.times);
     context.insert("days", &timetable.days);
     Html(
